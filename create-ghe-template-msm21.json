@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "VPC that has two public subnets and two private subnets in different AZs, NATs to enable instances in private subnets to access the internet and forwarder/bastion hosts to moderate SSH access for Git and MSM authorised access. Installs the GHE pri and replica appliances. To Do: Add Autoscaling.",
+  "Description" : "VPC that has two public subnets and two private subnets in different AZs, NATs to enable instances in private subnets to access the internet and forwarder/bastion hosts to moderate SSH access for Git and MSM authorised access. Installs the GHE pri and replica appliances. To Do: Add Autoscaling sections.",
   "Parameters" : {
     "KeyName" : {
       "Default" : "ghe-acces",
@@ -617,8 +617,13 @@
       "Properties" : {
         "GroupDescription" : "Enable access to the forwarder host",
         "VpcId" : { "Ref" : "VPC" },
+<<<<<<< HEAD
         "SecurityGroupIngress" : [ 
 	{ "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
+=======
+        "SecurityGroupIngress" : [
+        { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
+>>>>>>> fccb55c90ab3c692cb4d711cec917633723beae7
         { "IpProtocol" : "tcp", "FromPort" : "80",  "ToPort" : "80",  "CidrIp" : "0.0.0.0/0"},
         { "IpProtocol" : "tcp", "FromPort" : "222",  "ToPort" : "222",  "CidrIp" : "10.68.0.0/25" },
         { "IpProtocol" : "tcp", "FromPort" : "443",  "ToPort" : "443",  "CidrIp" : "0.0.0.0/0"},
@@ -632,7 +637,11 @@
         "GroupDescription" : "Enable access to the bastion ssh host",
         "VpcId" : { "Ref" : "VPC" },
         "SecurityGroupIngress" : [ { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
+<<<<<<< HEAD
 				   { "IpProtocol" : "udp", "FromPort" : "1194",  "ToPort" : "1194",  "CidrIp" : "0.0.0.0/0"}]
+=======
+                                   { "IpProtocol" : "udp", "FromPort" : "1194",  "ToPort" : "1194",  "CidrIp" : "0.0.0.0/0"}]
+>>>>>>> fccb55c90ab3c692cb4d711cec917633723beae7
     }
     },
 
@@ -764,4 +773,7 @@
     }
   }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> fccb55c90ab3c692cb4d711cec917633723beae7
