@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "VPC that has two public subnets and two private subnets in different AZs, NATs to enable instances in private subnets to access the internet and forwarder/bastion hosts to moderate SSH access for Git and MSM authorised access. Installs the GHE pri and replica appliances. version 1.02 To Do: Add Autoscaling sections. Timezone changed",
+  "Description" : "VPC that has two public subnets and two private subnets in different AZs, NATs to enable instances in private subnets to access the internet and forwarder/bastion hosts to moderate SSH access for Git and MSM authorised access. Installs the GHE pri and replica appliances. To Do: Add Autoscaling.",
   "Parameters" : {
     "KeyName" : {
       "Default" : "ghe-acces",
@@ -75,27 +75,27 @@
       "c3.8xlarge"  : { "EbsOptimized" : "false" }
     },
     "AWSNATAMI" : {
-       "eu-west-1"    : { "AMI" : "ami-ba96c5cd" },
+       "eu-west-1"    : { "AMI" : "ami-e4590793" },
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSSSHAMI" : {
-       "eu-west-1"    : { "AMI" : "ami-ba96c5cd" },
+       "eu-west-1"    : { "AMI" : "ami-e4590793" },
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSFORWARDER1AMI" : {
-       "eu-west-1"    : { "AMI" : "ami-82e4b9f5" },
+       "eu-west-1"    : { "AMI" : "ami-38da844f" },
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSFORWARDER2AMI" : {
-       "eu-west-1"    : { "AMI" : "ami-78e7ba0f" },
+       "eu-west-1"    : { "AMI" : "ami-e2da8495" },
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSGHEPRIAMI" : {
-       "eu-west-1"    : { "AMI" : "ami-52a9e425" },
+       "eu-west-1"    : { "AMI" : "ami-80da84f7" },
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     },
     "AWSGHEREPAMI" : {
-       "eu-west-1"    : { "AMI" : "ami-52a9e425" },
+       "eu-west-1"    : { "AMI" : "ami-8ada84fd" },
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     }
   },
@@ -363,7 +363,7 @@
         ]
       }
     },
-    "InboundPrivateNetworkAclEntry" : {
+    "InboundPrivateNetworkAclEntry100" : {
       "Type" : "AWS::EC2::NetworkAclEntry",
       "Properties" : {
         "NetworkAclId" : {"Ref" : "PrivateNetworkAcl"},
@@ -375,7 +375,7 @@
         "PortRange" : {"From" : "0", "To" : "65535"}
       }
     },
-    "OutboundPrivateNetworkAclEntry" : {
+    "OutboundPrivateNetworkAclEntry100" : {
       "Type" : "AWS::EC2::NetworkAclEntry",
       "Properties" : {
         "NetworkAclId" : {"Ref" : "PrivateNetworkAcl"},
@@ -385,6 +385,30 @@
         "Egress" : "true",
         "CidrBlock" : "0.0.0.0/0",
         "PortRange" : {"From" : "0", "To" : "65535"}
+      }
+    },
+    "InboundPrivateNetworkAclEntry200" : {
+      "Type" : "AWS::EC2::NetworkAclEntry",
+      "Properties" : {
+        "NetworkAclId" : {"Ref" : "PrivateNetworkAcl"},
+        "RuleNumber" : "200",
+        "Protocol" : "17",
+        "RuleAction" : "allow",
+        "Egress" : "false",
+        "CidrBlock" : "0.0.0.0/0",
+        "PortRange" : {"From" : "1194", "To" : "1194"}
+      }
+    },
+    "OutboundPrivateNetworkAclEntry200" : {
+      "Type" : "AWS::EC2::NetworkAclEntry",
+      "Properties" : {
+        "NetworkAclId" : {"Ref" : "PrivateNetworkAcl"},
+        "RuleNumber" : "200",
+        "Protocol" : "17",
+        "RuleAction" : "allow",
+        "Egress" : "true",
+        "CidrBlock" : "0.0.0.0/0",
+        "PortRange" : {"From" : "1194", "To" : "1194"}
       }
     },
     "PrivateSubnetNetworkAclAssociation1" : {
@@ -437,7 +461,7 @@
         "SecurityGroupIngress" : [
            { "IpProtocol" : "tcp", "FromPort" : "80",  "ToPort" : "80",  "CidrIp" : "0.0.0.0/0"} ,
            { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0"} ,
-           { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "SourceSecurityGroupId" : { "Ref" : "ForwarderSecurityGroup" } },
+           { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "SourceSecurityGroupId" : { "Ref" : "SSHSecurityGroup" } },
            { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "SourceSecurityGroupId" : { "Ref" : "GHInstanceSecurityGroup" } },
            { "IpProtocol" : "tcp", "FromPort" : "122",  "ToPort" : "122",  "SourceSecurityGroupId" : { "Ref" : "GHInstanceSecurityGroup" } },
            { "IpProtocol" : "tcp", "FromPort" : "1",  "ToPort" : "65535",  "SourceSecurityGroupId" : { "Ref" : "InternalSshSecurityGroup" } },
@@ -617,13 +641,8 @@
       "Properties" : {
         "GroupDescription" : "Enable access to the forwarder host",
         "VpcId" : { "Ref" : "VPC" },
-<<<<<<< HEAD
-        "SecurityGroupIngress" : [
-        { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
-=======
-        "SecurityGroupIngress" : [
-        { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
->>>>>>> fccb55c90ab3c692cb4d711cec917633723beae7
+        "SecurityGroupIngress" : [ 
+	{ "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
         { "IpProtocol" : "tcp", "FromPort" : "80",  "ToPort" : "80",  "CidrIp" : "0.0.0.0/0"},
         { "IpProtocol" : "tcp", "FromPort" : "222",  "ToPort" : "222",  "CidrIp" : "10.68.0.0/25" },
         { "IpProtocol" : "tcp", "FromPort" : "443",  "ToPort" : "443",  "CidrIp" : "0.0.0.0/0"},
@@ -637,11 +656,7 @@
         "GroupDescription" : "Enable access to the bastion ssh host",
         "VpcId" : { "Ref" : "VPC" },
         "SecurityGroupIngress" : [ { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
-<<<<<<< HEAD
-                                   { "IpProtocol" : "udp", "FromPort" : "1194",  "ToPort" : "1194",  "CidrIp" : "0.0.0.0/0"}]
-=======
-                                   { "IpProtocol" : "udp", "FromPort" : "1194",  "ToPort" : "1194",  "CidrIp" : "0.0.0.0/0"}]
->>>>>>> fccb55c90ab3c692cb4d711cec917633723beae7
+				   { "IpProtocol" : "udp", "FromPort" : "1194",  "ToPort" : "1194",  "CidrIp" : "0.0.0.0/0"}]
     }
     },
 
@@ -773,7 +788,4 @@
     }
   }
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> fccb55c90ab3c692cb4d711cec917633723beae7
