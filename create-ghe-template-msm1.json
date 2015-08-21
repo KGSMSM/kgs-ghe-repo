@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "VPC that has two public subnets and two private subnets in different AZs, NATs to enable instances in private subnets to access the internet and forwarder/bastion hosts to moderate SSH access for Git and MSM authorised access. Installs the GHE pri and replica appliances. To Do: Add Autoscaling. Timezone changed..... Replica failed over testi 2",
+  "Description" : "VPC that has two public subnets and two private subnets in different AZs, NATs to enable instances in private subnets to access the internet and forwarder/bastion hosts to moderate SSH access for Git and MSM authorised access. Installs the GHE pri and replica appliances. To Do: Add Autoscaling. Timezone changed..... Replica failed over testi 3",
   "Parameters" : {
     "KeyName" : {
       "Default" : "ghe-acces",
