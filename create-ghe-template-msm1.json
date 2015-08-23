@@ -656,6 +656,7 @@
         "GroupDescription" : "Enable access to the bastion ssh host",
         "VpcId" : { "Ref" : "VPC" },
         "SecurityGroupIngress" : [ { "IpProtocol" : "tcp", "FromPort" : "22",  "ToPort" : "22",  "CidrIp" : "0.0.0.0/0"},
+				   { "IpProtocol" : "tcp", "FromPort" : "8443",  "ToPort" : "8443",  "CidrIp" : "0.0.0.0/0"},
 				   { "IpProtocol" : "udp", "FromPort" : "1194",  "ToPort" : "1194",  "CidrIp" : "0.0.0.0/0"}]
     }
     },
