@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sudo /sbin/iptables-restore < /etc/iptables.$1
+
+exit
+
