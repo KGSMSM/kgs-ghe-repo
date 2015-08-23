@@ -7,7 +7,7 @@ then
 fi
 
 
-###Call failover script and execute contents on the replica
+####Call failover script and execute contents on the replica
 ssh -i ../ghe-acces.pem -p122 admin@10.68.0.196 "bash -s" < failover.sh $1
 
 if [ $1 == "failback"  ]; then
