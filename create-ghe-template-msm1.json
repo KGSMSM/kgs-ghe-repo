@@ -100,7 +100,7 @@
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     },
     "AWSGHEREPAMI" : {
-       "eu-west-1"    : { "AMI" : "ami-8ada84fd" },
+       "eu-west-1"    : { "AMI" : "ami-86633bf1" },
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     }
   },
