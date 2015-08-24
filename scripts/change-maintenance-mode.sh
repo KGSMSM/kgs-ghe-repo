@@ -1,5 +1,5 @@
 #!/bin/bash
-#unsets the current primary maintenace mode!!!p
+#unsets the current primary maintenace mode....
 
 ghe-maintenance -$1
 
