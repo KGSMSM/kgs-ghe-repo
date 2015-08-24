@@ -1,6 +1,5 @@
 #!/bin/bash
 
-ghe-maintentenance -u
+ghe-maintenance -$1
 
 exit
-
