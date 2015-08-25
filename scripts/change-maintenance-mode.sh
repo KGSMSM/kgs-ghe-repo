@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Puts preferred primary into maintenance mode 22222
+#Puts preferred primary into maintenance mode 3333
 
 ghe-maintenance -$1
 
