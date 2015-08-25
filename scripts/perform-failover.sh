@@ -42,6 +42,7 @@ case "$1" in
                 ###Call failover script and execute contents on the new replica to re-promote the preferred Primary
                 ssh -i ../ghe-acces.pem -p122 admin@10.68.0.135 "bash -s" < failover.sh $1
                 ssh -i ../ghe-acces.pem -p222 msmadmin@10.68.0.35 "bash -s" < switch-traffic.sh primary
+                ssh -i ../ghe-acces.pem -p122 admin@10.68.0.196 "bash -s" < failover.sh backout
         ;;
         *)
                 echo Option not supported""

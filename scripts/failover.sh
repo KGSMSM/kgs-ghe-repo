@@ -50,7 +50,7 @@ function convert-primary-to-replica {
                 echo "Converting Primary to Replica"
                 sudo > /home/git/.ssh/known_hosts
                 ghe-repl-stop
-                yes | ghe-repl-setup 10.68.0.196
+                yes | ghe-repl-setup -f 10.68.0.196
                 ghe-repl-start
                 sleep 5
                 check-convert
@@ -115,6 +115,9 @@ case "$1" in
 
         re-promote) 
                 check1
+        ;;
+
+        backout)
                 backout1
         ;;
 
