@@ -2,7 +2,7 @@
 
 if [ $# -lt 1 ]
 then
-        echo "Usage : $0 failover|failback"
+        echo "Usage : $0 failover|convert-primary-to-replica|failback|re-promote"
         exit 0
 fi
 
@@ -37,10 +37,50 @@ function check2() {
 
 
 function backout1 {
+<<<<<<< HEAD
                 yes | ghe-repl-setup -f 10.68.0.135
+=======
+                ghe-repl-stop
+                yes | ghe-repl-setup -f 10.68.0.135
+                echo "================================================================"
                 ghe-repl-start
                 sleep 5
                 backout-check1
+}
+
+
+function convert-primary-to-replica {
+                echo "Converting Primary to Replica"
+                sudo > /home/git/.ssh/known_hosts
+                ghe-repl-stop
+                yes | ghe-repl-setup -f 10.68.0.196
+                ghe-repl-start
+                sleep 5
+                check-convert
+}
+
+
+function convert-replica-to-primary {
+                echo "Converting Preferred Replica to Preferred Primary"
+                sudo > /home/git/.ssh/known_hosts
+                ghe-repl-stop
+                yes | ghe-repl-setup 10.68.0.135
+>>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
+                ghe-repl-start
+                sleep 5
+                check-convert
+}
+
+
+
+function check-convert {
+                check4=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'` 
+                if [ $check4 -eq 6  ]; then
+                        echo "Conversion completed successfully."
+                else
+                        echo "***************Raise a CRITICAL alarm, something went really wrong.****************"
+                        exit 0
+                fi
 }
 
 function convert-primary-to-replica {
@@ -64,11 +104,11 @@ function check-convert {
 
 
 function backout-check1 {
-                check3=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'`
+                check3=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'` 
                 if [ $check3 -eq 6  ]; then
-                        exit 1
                         echo "Backout completed successfully."
                         echo "Disabling Maintenace Mode On Primary."
+                        #exit 1
                         ##change-maintenance-mode u
 
                 else
@@ -79,11 +119,32 @@ function backout-check1 {
 
 
 case "$1" in
+<<<<<<< HEAD
         failover)
+=======
+        failover) 
                 check1
                 check2 replica
         ;;
 
+        convert-primary-to-replica) 
+                convert-primary-to-replica
+        ;;
+
+        convert-replica-to-primary) 
+                convert-replica-to-primary
+        ;;
+
+        failback) 
+                check2 primary
+        ;;
+
+        re-promote) 
+>>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
+                check1
+        ;;
+
+<<<<<<< HEAD
         convert-primary)
                 convert-primary-to-replica
                 check1
@@ -92,6 +153,10 @@ case "$1" in
 
         failback)
                 check2 primary
+=======
+        backout)
+                backout1
+>>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
         ;;
 
         re-promote)

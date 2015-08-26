@@ -1,6 +1,6 @@
 #!/bin/bash
-###switchs iptables to replica or back to primary
+
+#switcher to route traffic through forwarder 1 or 2
 sudo /sbin/iptables-restore < /etc/iptables.$1
 
 exit
-
