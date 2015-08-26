@@ -1,2 +1,1 @@
-Git commit message "Testing PLANNED/CONTROLLED FAILOVERS (1)"
-Git commit message "Testing PLANNED/CONTROLLED FAILOVERS (1.0)"
+Git commit message "UNPLANNED FAILOVERS WITH SELF HEALING CAPABILITIES (1.0)"
