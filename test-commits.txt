@@ -1,1 +1,2 @@
 Git commit message "Testing PLANNED/CONTROLLED FAILOVERS (1)"
+Git commit message "Testing PLANNED/CONTROLLED FAILOVERS (1.0)"
