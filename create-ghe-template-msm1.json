@@ -1,6 +1,5 @@
 {
-
-    "AWSTemplateFormatVersion" : "2010-09-09",
+ "AWSTemplateFormatVersion" : "2010-09-09",
   "Description" : "VPC that has two public subnets and two private subnets in different AZs, NATs to enable instances in private subnets to access the internet and forwarder/bastion hosts to moderate SSH access for Git and MSM authorised access. Installs the GHE pri and replica appliances. To Do: Add Autoscaling......",
   "Parameters" : {
     "KeyName" : {
@@ -80,11 +79,7 @@
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSSSHAMI1" : {
-<<<<<<< HEAD
-       "eu-west-1"    : { "AMI" : "ami-3830684f" },
-=======
        "eu-west-1"    : { "AMI" : "ami-2880d85f" },
->>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSSSHAMI2" : {
@@ -104,11 +99,7 @@
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     },
     "AWSGHEREPAMI" : {
-<<<<<<< HEAD
-       "eu-west-1"    : { "AMI" : "ami-069bc371" },
-=======
-       "eu-west-1"    : { "AMI" : "ami-c6a4fcb1" },
->>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
+       "eu-west-1"    : { "AMI" : "ami-4f93b638" },
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     }
   },
@@ -798,3 +789,4 @@
     }
   }
 }
+
