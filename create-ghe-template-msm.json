@@ -87,19 +87,19 @@
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSFORWARDER1AMI" : {
-       "eu-west-1"    : { "AMI" : "ami-491b3f3e" },
+       "eu-west-1"    : { "AMI" : "ami-ed614f9a" },
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSFORWARDER2AMI" : {
-       "eu-west-1"    : { "AMI" : "ami-391b3f4e" },
+       "eu-west-1"    : { "AMI" : "ami-a3614fd4" },
        "eu-central-1" : { "AMI" : "ami-accff2b1" }
     },
     "AWSGHEPRIAMI" : {
-       "eu-west-1"    : { "AMI" : "ami-6f082f18" },
+       "eu-west-1"    : { "AMI" : "ami-3d67494a" },
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     },
     "AWSGHEREPAMI" : {
-       "eu-west-1"    : { "AMI" : "ami-6d082f1a" },
+       "eu-west-1"    : { "AMI" : "ami-07674970" },
        "eu-central-1" : { "AMI" : "ami-5a350f47" }
     }
   },
