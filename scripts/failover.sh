@@ -8,16 +8,20 @@ fi
 
 
 function check1 {
-        echo "**********Checking replication is in place before attempting failover.***********"
-                check1=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'` ##should be 6
-                if [ $check1 -eq 6  ]; then
+        ##echo "**********Checking replication is in place before attempting failover.***********"
+        ##check1=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'` ##should be 6
+        ##echo "CHECK1: ".$check1
+                ##echo "=====================SLEEPING==================="
+                ##sleep 120
+
+                ##if [ $check1 -eq 6  ]; then
                         echo "***********Promoting Replica to Primary.**********"
                         ghe-repl-promote
                         sleep 5
-                else
-                        echo "*******Unexpected status count, aborting failover.*******"
-                        exit 0
-                fi
+                #else
+                #        echo "*******Unexpected status count, aborting failover.*******"
+                #        exit 0
+                #fi
 }
 
 
@@ -37,12 +41,9 @@ function check2() {
 
 
 function backout1 {
-<<<<<<< HEAD
-                yes | ghe-repl-setup -f 10.68.0.135
-=======
                 ghe-repl-stop
                 yes | ghe-repl-setup -f 10.68.0.135
-                echo "================================================================"
+                echo "*****************Setting up replication mode**********************"
                 ghe-repl-start
                 sleep 5
                 backout-check1
@@ -50,13 +51,14 @@ function backout1 {
 
 
 function convert-primary-to-replica {
-                echo "Converting Primary to Replica"
-                sudo > /home/git/.ssh/known_hosts
+                echo "************************************************************Converting Primary to Replica"
+                ###sudo > /home/git/.ssh/known_hosts
                 ghe-repl-stop
                 yes | ghe-repl-setup -f 10.68.0.196
                 ghe-repl-start
-                sleep 5
-                check-convert
+                ##echo "==========================Sleeping for 2 minutes so check the preferred primaty is now in repliac mode====================================="
+                ##sleep 120
+                ######check-convert
 }
 
 
@@ -65,16 +67,23 @@ function convert-replica-to-primary {
                 sudo > /home/git/.ssh/known_hosts
                 ghe-repl-stop
                 yes | ghe-repl-setup 10.68.0.135
->>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
                 ghe-repl-start
                 sleep 5
                 check-convert
 }
 
 
+function convert-to-preferred-replica {
+                echo "Converting back to Preferred Replica"
+                yes | ghe-repl-setup 10.68.0.135
+                ghe-repl-start
+                sleep 5
+                ##check-convert
+}
+
 
 function check-convert {
-                check4=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'` 
+                check4=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'`
                 if [ $check4 -eq 6  ]; then
                         echo "Conversion completed successfully."
                 else
@@ -83,28 +92,9 @@ function check-convert {
                 fi
 }
 
-function convert-primary-to-replica {
-                yes | ghe-repl-setup 10.68.0.196
-                ghe-repl-start
-                sleep 5
-                check-convert
-}
-
-
-function check-convert {
-                check4=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'`
-                if [ $check4 -eq 6  ]; then
-                        exit 1
-                        echo "Convertion completed successfully."
-                else
-                        echo "***************Raise a CRITICAL alarm, something went really wrong.****************"
-                        exit 0
-                fi
-}
-
 
 function backout-check1 {
-                check3=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'` 
+                check3=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'`
                 if [ $check3 -eq 6  ]; then
                         echo "Backout completed successfully."
                         echo "Disabling Maintenace Mode On Primary."
@@ -118,53 +108,59 @@ function backout-check1 {
 }
 
 
+function check-replication() {
+        ##echo "**************Checking Replication has been started on reboot.***************"
+        check_replica=`ghe-repl-status |grep OK |wc | awk '{ print $1 }'`  ###should be 6
+        if [ $check_replica -eq 6  ]; then
+                #echo "***************Replication has been started successfully.*****************"
+                echo $check_replica
+                #####sudo reboot
+        else
+                echo "******************Replication mode NOT set following a reboot****************"
+                backout1
+        fi
+}
+
 case "$1" in
-<<<<<<< HEAD
         failover)
-=======
-        failover) 
                 check1
                 check2 replica
         ;;
 
-        convert-primary-to-replica) 
+        convert-primary-to-replica)
                 convert-primary-to-replica
+                convert-primary-to-replica
+                ##convert-primary-to-replica
         ;;
 
-        convert-replica-to-primary) 
+        convert-replica-to-primary)
                 convert-replica-to-primary
         ;;
 
-        failback) 
-                check2 primary
-        ;;
-
-        re-promote) 
->>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
-                check1
-        ;;
-
-<<<<<<< HEAD
-        convert-primary)
-                convert-primary-to-replica
-                check1
-        ;;
-
-
         failback)
                 check2 primary
-=======
-        backout)
-                backout1
->>>>>>> f8ac800f9ab236f3559ce3f6e07566d0837a9014
         ;;
 
         re-promote)
-                convert-primary-to-replica
                 check1
+        ;;
+
+        backout)
+                backout1
+        ;;
+
+        check-replication)
+                check-replication
+        ;;
+
+        convert-to-preferred-replica)
+                convert-to-preferred-replica
+                ##convert-to-preferred-replica
+                ##convert-to-preferred-replica
         ;;
 
         *) echo "Invalid option failover|failback"
    ;;
 
 esac
+
