@@ -1,0 +1,24 @@
+#!/bin/bash
+
+case $1 in
+        a)
+                ssh -i /home/msmadmin/ghe-acces.pem -p122 admin@10.68.0.196 "bash -s" < /home/msmadmin/scripts/runit2.sh check-rep-is-pri
+        ;;
+
+        b)
+                ssh -i /home/msmadmin/ghe-acces.pem -p122 admin@10.68.0.135 "bash -s" < /home/msmadmin/scripts/runit2.sh convert-primary-to-replica
+        ;;
+
+        c)
+                ssh -i /home/msmadmin/ghe-acces.pem -p122 admin@10.68.0.135 "bash -s" < /home/msmadmin/scripts/runit2.sh re-promote-to-primary
+        ;;
+
+        d)
+                ssh -i /home/msmadmin/ghe-acces.pem -p122 admin@10.68.0.196 "bash -s" < /home/msmadmin/scripts/runit2.sh convert-replica-to-primary
+        ;;
+
+        *)
+                echo "No Options Configured"
+        ;;
+esac
+

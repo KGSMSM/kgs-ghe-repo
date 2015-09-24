@@ -1,0 +1,51 @@
+#!/bin/bash
+
+function check-rep-is-pri {
+
+        #echo "In check-rep-is-pri function"
+        check=`ifconfig | grep tun0; echo $?`
+        if [ $check -eq 1 ]; then
+                #echo "Trapped in Check"
+                return $check
+                ##ssh -i /home/msmadmin/ghe-acces.pem -p122 admin@10.68.0.135 "bash -s" < /home/msmadmin/scripts/runit.sh convert-primary-to-replica
+        fi
+}
+
+function convert-primary-to-replica {
+        yes | ghe-repl-setup -f 10.68.0.196
+        ghe-repl-start
+
+}
+
+function convert-replica-to-primary {
+        yes | ghe-repl-setup -f 10.68.0.135
+        ghe-repl-start
+
+}
+
+function re-promote-to-primary {
+        ghe-repl-promote
+
+}
+
+case "$1" in
+        check-rep-is-pri)
+                check-rep-is-pri
+        ;;
+        convert-primary-to-replica)
+                convert-primary-to-replica
+        ;;
+
+        convert-replica-to-primary)
+                convert-replica-to-primary
+        ;;
+
+        re-promote-to-primary)
+                re-promote-to-primary
+        ;;
+
+        *)
+                echo "No Option"
+        ;;
+esac
+

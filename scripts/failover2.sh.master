@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]
+then
+        echo "Usage : $0 failover|convert-primary-to-replica|failback|re-promote"
+        exit 0
+fi
+
+
+function convert-primary-to-replica {
+
+                yes |ghe-repl-setup -f 10.68.0.196
+                ghe-repl-start
+}
+
+case "$1" in
+        convert-primary-to-replica)
+                convert-primary-to-replica
+        ;;
+
+        *) echo "Invalid option"
+   ;;
+
+esac
+

@@ -13,7 +13,9 @@ if [ $check_primary -eq 0 ]; then
         echo "*****************************Nothing to do, just log to syslog*****************************"
         exit 0
 else
-        sleep 90 ##tweak to 60
+        logger Waiting 2 mins For primary To Come Back
+        echo "Waiting For 2 mins primary To Come Back"
+        sleep 120 ##tweak to 60
         check_primary=`nc -z -w1 10.68.0.135 122; echo $?`
         if [ "$check_primary" -eq 1 ]; then
                 logger Initiating a Failover

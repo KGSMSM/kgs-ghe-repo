@@ -1,0 +1,26 @@
+#!/bin/bash
+
+logger ============================================CHECK_PRIMARY IN AZ Started\=========================================================
+##Check if preferred primary is up
+check_primary=`nc -z -w1 10.68.0.135 122; echo $?`
+
+##If preferred primary is up, do nothing or log message
+if [ $check_primary -eq 0 ]; then
+        /home/msmadmin/scripts/switch-traffic.sh primary
+
+        logger Primary Node is currently running
+        logger Nothing To Do
+        echo "*******************Primary Node is currently running*******************"
+        echo "*****************************Nothing to do, just log to syslog*****************************"
+        exit 0
+else
+        if [ "$check_primary" -eq 1 ]; then
+                logger Initiating a Failover
+                echo "*******************Initiate failover from preferred primary to replica*******************"
+                /home/msmadmin/scripts/perform-failover.sh failover
+                echo "*******************FAILOVER COMPLETE*******************"
+                /home/msmadmin/scripts/switch-traffic.sh replica
+        fi
+fi
+logger ========================================CHECK_PRIMARY IN AZ Complete\==============================================
+

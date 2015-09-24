@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 if [ $# -lt 1 ]
 then
         echo "Usage : $0 failover|convert-primary-to-replica|failback|re-promote|convert-replica-to-primary"
@@ -8,6 +9,14 @@ fi
 
 
 case "$1" in
+        check-replica-is-primary)
+                ssh -i /home/msmadmin/ghe-acces.pem -p122 admin@10.68.0.196 "bash -s" < /home/msmadmin/scripts/failover.sh check-replica-is-primary
+        exit
+        #if [ $check -eq 1 ]; then
+                echo "CHECK: $check"
+        #fi
+
+        ;;
         failover)
                 ###Call failover script and execute contents on the preferred replica
                 ##ssh -i ../ghe-acces.pem -p122 admin@10.68.0.196 "bash -s" < failover.sh $1
@@ -21,7 +30,7 @@ case "$1" in
 
         convert-primary-to-replica)
                 ###Call failover script and execute contents on the preferred primary
-                ssh -i ../ghe-acces.pem -p122 admin@10.68.0.135 "bash -s" < failover.sh $1
+                ssh -i /home/msmadmin/ghe-acces.pem -p122 admin@10.68.0.135 "bash -s" < /home/msmadmin/scripts/failover.sh $1
 
         ;;
 

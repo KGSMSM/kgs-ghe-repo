@@ -1,0 +1,6 @@
+#!/bin/bash
+
+/home/msmadmin/scripts/perform-failover.sh check-replica-is-primary
+
+
+

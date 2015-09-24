@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+###check 10.68.0.196 is a replica
+##if it is a replica do nothing
+##else
+#re-prompte preferred primary back to a primary
+#ca#convert preferred primary to replica
+##tttttt traffic
+##convert preferred replica back to a replica
+
+STATE=$3
+
+if [ $STATE == "MASTER" ]; then
+EIP1=52.18.153.196
+INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
+
+        check=`/home/msmadmin/scripts/runit.sh a;echo $?`
+        if [ $check -eq 1 ]; then  ##no tun0 so must be in primary mode
+                logger "CHECK:== $check"
+                /home/msmadmin/scripts/runit.sh b ##convert preferred pri to rep
+                /home/msmadmin/scripts/runit.sh c ##re-promote preferred pri back to pri
+        fi
