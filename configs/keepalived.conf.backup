@@ -19,8 +19,7 @@
                         auth_pass 1111
         }
         virtual_ipaddress {
-                        52.18.153.196
+                        52.18.153.196 dev eth0
         }
         notify /etc/keepalived/switch-eip.sh
-        #notify /etc/keepalived/failover-eip.sh
 }
